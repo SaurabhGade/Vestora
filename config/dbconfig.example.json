@@ -1,0 +1,9 @@
+{
+  "Database": {
+    "Host": "localhost",
+    "Port": 5432,
+    "Name": "vestora",
+    "Username": "vestora",
+    "Password": "CHANGE_ME"
+  }
+}

@@ -1,0 +1,44 @@
+# .NET
+**/bin/
+**/obj/
+
+# Rider
+.idea/
+*.suo
+*.user
+
+# VS Code
+.vscode/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Yarn
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+.pnp.*
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local configuration
+config/dbconfig.json
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# bins
+/**/bin/
+/**/obj/

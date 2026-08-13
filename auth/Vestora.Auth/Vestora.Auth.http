@@ -1,0 +1,6 @@
+@Vestora.Auth_HostAddress = http://localhost:5097
+
+GET {{Vestora.Auth_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

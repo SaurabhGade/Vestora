@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: vestora-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: "vestora"
+      POSTGRES_USER: "vestora"
+      POSTGRES_PASSWORD: "Vestora@Saurabh"
+    ports:
+      - "5432:5432"
+    volumes:
+      - vestora_postgres_data:/var/lib/postgresql
+
+volumes:
+  vestora_postgres_data:

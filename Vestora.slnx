@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/api/">
+    <Project Path="api/Vestora.Api/Vestora.Api.csproj" />
+  </Folder>
+  <Folder Name="/auth/">
+    <Project Path="auth/Vestora.Auth/Vestora.Auth.csproj" />
+  </Folder>
+  <Folder Name="/bo/">
+    <Project Path="bo/Vestora.BO/Vestora.BO.csproj" />
+  </Folder>
+  <Folder Name="/dal/">
+    <Project Path="dal/Vestora.DAL/Vestora.DAL.csproj" />
+  </Folder>
+  <Folder Name="/dto/">
+    <Project Path="dto/Vestora.DTO/Vestora.DTO.csproj" />
+  </Folder>
+</Solution>

@@ -1,9 +1,14 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Vestora.DAL.Configuration;
 using Vestora.DAL.Data;
-
+using Vestora.DAL.Users;
 namespace Vestora.Auth;
+
+using Microsoft.AspNetCore.Identity;
+using Vestora.BO.Users;
+using Vestora.DAL.Entities;
 
 public class Startup
 {
@@ -36,6 +41,11 @@ public class Startup
         {
             options.UseNpgsql(sConnectionString);
         });
+
+        i_objIServiceCollection.AddScoped<IUserDAL, UserDAL>();
+        i_objIServiceCollection.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+        i_objIServiceCollection.AddScoped<IUserBO, UserBO>();
+
 
         i_objIServiceCollection.AddControllers();
 

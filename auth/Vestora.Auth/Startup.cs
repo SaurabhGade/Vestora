@@ -9,6 +9,9 @@ namespace Vestora.Auth;
 using Microsoft.AspNetCore.Identity;
 using Vestora.BO.Users;
 using Vestora.DAL.Entities;
+using System.IO;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 
 public class Startup
 {
@@ -30,6 +33,14 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection i_objIServiceCollection)
     {
+        var dataProtectionPath = Path.GetFullPath(
+            Path.Combine(
+                m_objIWebHostEnvironment.ContentRootPath,
+                "../../config/DataProtectionKeys")); 
+        
+        i_objIServiceCollection.AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionPath))
+            .SetApplicationName("Vestora");
         DatabaseConfig objDatabaseConfig = LoadDatabaseConfig();
 
         i_objIServiceCollection.AddSingleton(objDatabaseConfig);
@@ -42,6 +53,8 @@ public class Startup
             options.UseNpgsql(sConnectionString);
         });
 
+
+        /// Inject DI
         i_objIServiceCollection.AddScoped<IUserDAL, UserDAL>();
         i_objIServiceCollection.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         i_objIServiceCollection.AddScoped<IUserBO, UserBO>();
@@ -61,6 +74,8 @@ public class Startup
                 options.LogoutPath = "/Logout";
 
                 options.Cookie.Name = "Vestora.Auth";
+                options.Cookie.Path = "/";
+
 
                 options.Cookie.HttpOnly = true;
 

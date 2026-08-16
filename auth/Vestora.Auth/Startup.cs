@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Vestora.DAL.Configuration;
 using Vestora.DAL.Data;
@@ -6,109 +7,101 @@ namespace Vestora.Auth;
 
 public class Startup
 {
-    private readonly IConfiguration _configuration;
-    private readonly IWebHostEnvironment _environment;
+    /// <summary>
+    /// Author: Saurabh Gade
+    /// Date: Aug 16 2026
+    /// Initial Cookie-based Authentication setup
+    /// </summary>
+    private readonly IConfiguration m_objIConfiguration;
+    private readonly IWebHostEnvironment m_objIWebHostEnvironment;
 
     public Startup(
-        IConfiguration configuration,
-        IWebHostEnvironment environment)
+        IConfiguration i_objIConfiguration,
+        IWebHostEnvironment i_objIWebHostEnvironment)
     {
-        _configuration = configuration;
-        _environment = environment;
+        m_objIConfiguration = i_objIConfiguration;
+        m_objIWebHostEnvironment = i_objIWebHostEnvironment;
     }
 
-    public void ConfigureServices(IServiceCollection services)
+    public void ConfigureServices(IServiceCollection i_objIServiceCollection)
     {
-        // -----------------------------------------
-        // Database Configuration
-        // -----------------------------------------
+        DatabaseConfig objDatabaseConfig = LoadDatabaseConfig();
 
-        var databaseConfig = LoadDatabaseConfig();
+        i_objIServiceCollection.AddSingleton(objDatabaseConfig);
 
-        services.AddSingleton(databaseConfig);
+        string sConnectionString =
+            DatabaseConnectionFactory.Create(objDatabaseConfig);
 
-        var connectionString =
-            DatabaseConnectionFactory.Create(databaseConfig);
-
-        services.AddDbContext<VestoraDbContext>(options =>
+        i_objIServiceCollection.AddDbContext<VestoraDbContext>(options =>
         {
-            options.UseNpgsql(connectionString);
+            options.UseNpgsql(sConnectionString);
         });
 
-        // -----------------------------------------
-        // MVC Controllers
-        // -----------------------------------------
+        i_objIServiceCollection.AddControllers();
 
-        services.AddControllers();
+        i_objIServiceCollection.AddRazorPages();
 
-        // -----------------------------------------
-        // Razor Pages
-        // -----------------------------------------
+        // Cookie Authentication
+        i_objIServiceCollection
+            .AddAuthentication(
+                CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/Login";
+                options.LogoutPath = "/Logout";
 
-        services.AddRazorPages();
+                options.Cookie.Name = "Vestora.Auth";
 
-        // -----------------------------------------
-        // Authentication
-        // -----------------------------------------
-        // We will configure the actual authentication
-        // scheme/cookie here later.
+                options.Cookie.HttpOnly = true;
 
-        // services.AddAuthentication(...);
+                // Development only because we're currently using HTTP.
+                options.Cookie.SecurePolicy =
+                    CookieSecurePolicy.None;
 
-        // -----------------------------------------
-        // Authorization
-        // -----------------------------------------
+                options.Cookie.SameSite =
+                    SameSiteMode.Lax;
 
-        services.AddAuthorization();
+                options.ExpireTimeSpan =
+                    TimeSpan.FromHours(8);
+
+                options.SlidingExpiration = true;
+            });
+
+        i_objIServiceCollection.AddAuthorization();
     }
 
-    public void Configure(WebApplication app)
+    public void Configure(WebApplication i_objWebApplication)
     {
-        // -----------------------------------------
-        // Development
-        // -----------------------------------------
-
-        if (app.Environment.IsDevelopment())
+        if (i_objWebApplication.Environment.IsDevelopment())
         {
-            app.UseDeveloperExceptionPage();
+            i_objWebApplication.UseDeveloperExceptionPage();
         }
 
-        // -----------------------------------------
-        // Routing
-        // -----------------------------------------
+        i_objWebApplication.UseRouting();
 
-        app.UseRouting();
+        // IMPORTANT:
+        // Authentication must come before Authorization.
 
-        // -----------------------------------------
-        // Authentication
-        // -----------------------------------------
-        // Will be enabled when we implement login.
+        i_objWebApplication.UseAuthentication();
 
-        // app.UseAuthentication();
+        i_objWebApplication.UseAuthorization();
 
-        // -----------------------------------------
-        // Authorization
-        // -----------------------------------------
+        i_objWebApplication.MapControllers();
 
-        app.UseAuthorization();
-
-        // -----------------------------------------
-        // Controllers
-        // -----------------------------------------
-
-        app.MapControllers();
-
-        // -----------------------------------------
-        // Razor Pages
-        // -----------------------------------------
-
-        app.MapRazorPages();
+        i_objWebApplication.MapRazorPages();
+        // catch root requests and bounce them to the Login page
+        i_objWebApplication.MapGet("/", context =>
+        {
+            context.Response.Redirect("/Login");
+            return Task.CompletedTask;
+        });
     }
 
     private DatabaseConfig LoadDatabaseConfig()
     {
-        var relativePath =
-            _configuration["Config:DatabaseConfigPath"];
+
+        string? relativePath =
+            m_objIConfiguration["Config:DatabaseConfigPath"];
 
         if (string.IsNullOrWhiteSpace(relativePath))
         {
@@ -116,13 +109,10 @@ public class Startup
                 "Config:DatabaseConfigPath is not configured.");
         }
 
-        var fullPath = Path.GetFullPath(
+        string fullPath = Path.GetFullPath(
             Path.Combine(
-                _environment.ContentRootPath,
+                m_objIWebHostEnvironment.ContentRootPath,
                 relativePath));
-
-        Console.WriteLine(
-            $"Database config path: {fullPath}");
 
         if (!File.Exists(fullPath))
         {
@@ -130,23 +120,24 @@ public class Startup
                 $"Database configuration file not found: {fullPath}");
         }
 
-        var config = new ConfigurationBuilder()
+        IConfigurationRoot objIConfigurationRoot = new ConfigurationBuilder()
             .AddJsonFile(
                 fullPath,
                 optional: false,
                 reloadOnChange: true)
             .Build();
 
-        var databaseConfig =
-            config.GetSection("Database")
-                  .Get<DatabaseConfig>();
+        DatabaseConfig? objDatabaseConfig =
+            objIConfigurationRoot
+                .GetSection("Database")
+                .Get<DatabaseConfig>();
 
-        if (databaseConfig == null)
+        if (objDatabaseConfig == null)
         {
             throw new InvalidOperationException(
                 "Database configuration is invalid.");
         }
 
-        return databaseConfig;
+        return objDatabaseConfig;
     }
 }

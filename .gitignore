@@ -34,6 +34,8 @@ config/dbconfig.json
 # Logs
 logs/
 *.log
+**/logs/**
+**/Logs/**
 
 # OS
 .DS_Store
@@ -42,3 +44,4 @@ Thumbs.db
 # bins
 /**/bin/
 /**/obj/
+

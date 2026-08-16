@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Vestora.BO.Users;
+using Vestora.DTO.Users;
 
 namespace Vestora.Auth.Pages;
 
@@ -29,10 +31,12 @@ public class LoginModel : PageModel
     public string? ReturnUrl { get; set; }
     private readonly IConfiguration m_objIConfiguration;
     private readonly ILogger<LoginModel> m_objILogger; // 1. Add the logger variable
-    public LoginModel(IConfiguration i_objIConfiguration, ILogger<LoginModel> i_objILogger)
+    private IUserBO m_objUserBO;
+    public LoginModel(IConfiguration i_objIConfiguration, ILogger<LoginModel> i_objILogger, IUserBO i_objUserBO)
     {
         m_objIConfiguration = i_objIConfiguration;
         m_objILogger = i_objILogger;
+        m_objUserBO = i_objUserBO;
     }
     public IActionResult OnGet()
     {
@@ -65,35 +69,23 @@ public class LoginModel : PageModel
 
         if (!ModelState.IsValid)
         {
-            m_objILogger.LogInformation("ModelState is INVALID");
-
-            foreach (var error in ModelState.Values
-                         .SelectMany(v => v.Errors))
-            {
-                m_objILogger.LogInformation("ERROR: {error.ErrorMessage}", error.ErrorMessage);
-            }
-
             return Page();
         }
 
         m_objILogger.LogInformation("ModelState is VALID");
+        var request = new LoginRequestDTO
+        {
+            Email = Email,
+            Password = Password
+        };
 
-        var validEmail =
-            Email.Equals(
-                "admin@vestora.com",
-                StringComparison.OrdinalIgnoreCase);
+        var result = await m_objUserBO.LoginAsync(request);
 
-        var validPassword =
-            Password == "2026@Admin";
-
-        m_objILogger.LogInformation($"Email valid: {validEmail}");
-        m_objILogger.LogInformation($"Password valid: {validPassword}");
-
-        if (!validEmail || !validPassword)
+        if (!result.Success)
         {
             ModelState.AddModelError(
                 string.Empty,
-                "Invalid email or password.");
+                result.Message);
 
             return Page();
         }
@@ -101,36 +93,46 @@ public class LoginModel : PageModel
         m_objILogger.LogInformation("Credentials valid.");
 
         var claims = new List<Claim>
-    {
-        new(
-            ClaimTypes.NameIdentifier,
-            "1"),
+        {
+            new(
+                ClaimTypes.NameIdentifier,
+                result.UserId!.Value.ToString()),
 
-        new(
-            ClaimTypes.Name,
-            Email),
+            new(
+                ClaimTypes.Name,
+                result.FirstName),
 
-        new(
-            ClaimTypes.Email,
-            Email)
-    };
+            new(
+                ClaimTypes.Email,
+                result.Email)
+        };
 
         var identity = new ClaimsIdentity(
-            claims,
-            CookieAuthenticationDefaults.AuthenticationScheme);
+           claims,
+           CookieAuthenticationDefaults.AuthenticationScheme);
 
         var principal = new ClaimsPrincipal(identity);
 
         var authenticationProperties =
-            new AuthenticationProperties
-            {
-                IsPersistent = true,
-                ExpiresUtc =
-                    DateTimeOffset.UtcNow.AddHours(8)
-            };
+         new AuthenticationProperties
+         {
+             IsPersistent = true,
+             ExpiresUtc =
+                 DateTimeOffset.UtcNow.AddHours(8)
+         };
 
-        m_objILogger.LogInformation("Attempting SignInAsync...");
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            principal,
+            authenticationProperties);
 
+        Console.WriteLine($"User {result.UserId} authenticated successfully.");
+
+        if (!string.IsNullOrWhiteSpace(ReturnUrl) &&
+            Url.IsLocalUrl(ReturnUrl))
+        {
+            return LocalRedirect(ReturnUrl);
+        }
         await HttpContext.SignInAsync(
             CookieAuthenticationDefaults.AuthenticationScheme,
             principal,

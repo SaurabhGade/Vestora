@@ -42,11 +42,6 @@ public class Startup
         var databaseConfig =
             LoadDatabaseConfig();
 
-        /// Inject DI
-        i_objIServiceCollection.AddScoped<IDashboardDAL, DashboardDAL>();
-        i_objIServiceCollection.AddScoped<IDashboardBO, DashboardBO>();
-
-
         i_objIServiceCollection.AddSingleton(databaseConfig);
 
         var connectionString =

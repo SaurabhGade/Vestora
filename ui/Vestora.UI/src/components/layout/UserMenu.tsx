@@ -1,13 +1,22 @@
-export default function UserMenu() {
+import { useEffect } from "react";
+import { useAuth } from "../../auth/AuthContext";
 
+export default function UserMenu() {
   const handleLogout = () => {
     window.location.href =
       "http://localhost:5227/Logout";
   };
 
+  const {user, loading, isAuthenticated} = useAuth();
+
   const handleProfile = () => {
     console.log("Profile page coming later");
   };
+  useEffect(() => {
+    if(!isAuthenticated){
+      handleLogout();
+    }
+  }, [])
 
   return (
     <div className="user-menu">
@@ -15,17 +24,17 @@ export default function UserMenu() {
       <div className="user-menu-header">
 
         <div className="avatar avatar-large">
-          S
+          {user?.firstName?.charAt(0).toUpperCase()}
         </div>
 
         <div>
 
           <div className="user-menu-name">
-            Saurabh Gade
+            {user?.firstName}
           </div>
 
           <div className="user-menu-email">
-            gadesaurabh3@gmail.com
+            {user?.email}
           </div>
 
         </div>

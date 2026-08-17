@@ -8,10 +8,11 @@ import { useAuth } from "./AuthContext";
 export default function ProtectedRoute() {
 
     const {
+        user,
         isAuthenticated,
         loading
     } = useAuth();
-
+    
     if (loading) {
         return (
             <div>

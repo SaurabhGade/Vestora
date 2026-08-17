@@ -1,6 +1,18 @@
 import { useState } from "react";
 import UserMenu from "./UserMenu";
+import { useAuth } from "../../auth/AuthContext";
 
+export interface CurrentUser {
+    userId: string;
+    email: string;
+    firstName: string;
+    authenticated: boolean;
+}
+interface AuthContextType {
+  user: CurrentUser | null;
+  loading: boolean;
+  isAuthenticated: boolean;
+}
 interface TopBarProps {
   onMenuClick: () => void;
 }
@@ -11,6 +23,7 @@ export default function TopBar({
 
   const [userMenuOpen, setUserMenuOpen] =
     useState(false);
+  const userContext : AuthContextType | undefined = useAuth();
 
   return (
     <header className="topbar">
@@ -33,13 +46,13 @@ export default function TopBar({
         >
 
           <div className="avatar">
-            S
+            {userContext.user?.firstName?.charAt(0)?.toUpperCase() ?? "X"}
           </div>
 
           <div className="user-summary">
 
             <span className="user-name">
-              Saurabh Gade
+              {userContext.user?.firstName}
             </span>
 
             <span className="user-role">

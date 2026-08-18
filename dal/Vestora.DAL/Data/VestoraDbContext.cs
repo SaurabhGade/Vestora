@@ -5,13 +5,12 @@ namespace Vestora.DAL.Data;
 
 public class VestoraDbContext : DbContext
 {
-    public VestoraDbContext(
-        DbContextOptions<VestoraDbContext> options)
-        : base(options)
+    public VestoraDbContext(DbContextOptions<VestoraDbContext> options): base(options)
     {
     }
 
     public DbSet<User> Users { get; set; } = null!;
+    public DbSet<ConfigSetting> ConfigSettings { get; set; }
 
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)

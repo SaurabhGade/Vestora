@@ -1,5 +1,5 @@
-const AUTH_URL = "http://localhost:5227";
-const UI_URL = "http://localhost:5173";
+const AUTH_URL =  import.meta.env.VITE_AUTH_BASE_URL;
+const UI_URL =  import.meta.env.VITE_API_BASE_URL;
 
 function App() {
   const loginUrl = `${AUTH_URL}/Login?returnUrl=${encodeURIComponent(UI_URL)}`;

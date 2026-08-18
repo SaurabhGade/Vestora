@@ -3,14 +3,28 @@ using Serilog;
 using Vestora.Api.Middleware;
 using Vestora.DAL.Dashboard;
 using Vestora.BO.Dashboard;
+using Vestora.BO.Users;
+using Vestora.DAL.Users;
+using Microsoft.AspNetCore.Identity;
+using Vestora.DAL.Entities;
+using Vestora.DAL.Config;
+using Vestora.BO.Config;
 
 
 /// Author: Saurabh Gade
 /// Inject DI from here
 void addSerives(IServiceCollection i_objIServiceCollection)
 {
-    i_objIServiceCollection.AddScoped<IDashboardDAL, DashboardDAL>();
+    i_objIServiceCollection.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
     i_objIServiceCollection.AddScoped<IDashboardBO, DashboardBO>();
+    i_objIServiceCollection.AddScoped<IDashboardDAL, DashboardDAL>();
+    
+    i_objIServiceCollection.AddScoped<IUserBO, UserBO>();
+    i_objIServiceCollection.AddScoped<IUserDAL, UserDAL>();
+
+    i_objIServiceCollection.AddScoped<IConfigBO, ConfigBO>();
+    i_objIServiceCollection.AddScoped<IConfigDAL, ConfigDAL>();
 }
 
 var builder = WebApplication.CreateBuilder(args);

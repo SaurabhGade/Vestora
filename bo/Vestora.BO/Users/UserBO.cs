@@ -1,21 +1,20 @@
 using Microsoft.AspNetCore.Identity;
 using Vestora.DAL.Entities;
 using Vestora.DAL.Users;
+using Vestora.DTO.Dashboard;
 using Vestora.DTO.Users;
 
 namespace Vestora.BO.Users;
 
 public class UserBO : IUserBO
 {
-    private readonly IUserDAL _userDAL;
-    private readonly IPasswordHasher<User> _passwordHasher;
+    private readonly IUserDAL m_objIUserDAL;
+    private readonly IPasswordHasher<User> m_objIPasswordHasher;
 
-    public UserBO(
-        IUserDAL userDAL,
-        IPasswordHasher<User> passwordHasher)
+    public UserBO(IUserDAL i_objIUserDAL, IPasswordHasher<User> i_objIPasswordHasher)
     {
-        _userDAL = userDAL;
-        _passwordHasher = passwordHasher;
+        m_objIUserDAL = i_objIUserDAL;
+        m_objIPasswordHasher = i_objIPasswordHasher;
     }
 
     public async Task<RegisterResponseDTO> RegisterAsync(
@@ -61,7 +60,7 @@ public class UserBO : IUserBO
         }
 
         var emailExists =
-            await _userDAL.EmailExistsAsync(
+            await m_objIUserDAL.EmailExistsAsync(
                 email,
                 cancellationToken);
 
@@ -106,12 +105,12 @@ public class UserBO : IUserBO
         };
 
         user.PasswordHash =
-            _passwordHasher.HashPassword(
+            m_objIPasswordHasher.HashPassword(
                 user,
                 request.Password);
 
         var createdUser =
-            await _userDAL.CreateAsync(
+            await m_objIUserDAL.CreateAsync(
                 user,
                 cancellationToken);
 
@@ -126,14 +125,14 @@ public class UserBO : IUserBO
     }
 
     public async Task<LoginResponseDTO> LoginAsync(
-        LoginRequestDTO request,
-        CancellationToken cancellationToken = default)
+          LoginRequestDTO request,
+          CancellationToken cancellationToken = default)
     {
         var email =
             request.Email.Trim().ToLowerInvariant();
 
         var user =
-            await _userDAL.GetByEmailAsync(
+            await m_objIUserDAL.GetByEmailAsync(
                 email,
                 cancellationToken);
 
@@ -156,7 +155,7 @@ public class UserBO : IUserBO
         }
 
         var passwordResult =
-            _passwordHasher.VerifyHashedPassword(
+            m_objIPasswordHasher.VerifyHashedPassword(
                 user,
                 user.PasswordHash,
                 request.Password);
@@ -174,7 +173,7 @@ public class UserBO : IUserBO
         user.LastLoginAt = DateTime.UtcNow;
         user.UpdatedAt = DateTime.UtcNow;
 
-        await _userDAL.UpdateAsync(
+        await m_objIUserDAL.UpdateAsync(
             user,
             cancellationToken);
 
@@ -189,6 +188,31 @@ public class UserBO : IUserBO
             FirstName = user.FirstName,
 
             Message = "Login successful."
+        };
+    }
+    public async Task<GetUserResponseDTO?> GetUserAsync(
+    GetUserRequestDTO request)
+    {
+        if (request.SessionObject == null)
+        {
+            return null;
+        }
+
+        var user =
+            await m_objIUserDAL.GetUserByIdAsync(
+                request.SessionObject.UserId);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        return new GetUserResponseDTO
+        {
+            UserId = user.UserId,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName
         };
     }
 }

@@ -23,4 +23,5 @@ public interface IUserDAL
     Task UpdateAsync(
         User user,
         CancellationToken cancellationToken = default);
+    Task<Entities.User?> GetUserByIdAsync(long userId);
 }

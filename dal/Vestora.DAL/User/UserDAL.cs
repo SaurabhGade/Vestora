@@ -1,23 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using Vestora.DAL.Data;
 using Vestora.DAL.Entities;
-
+using Vestora.DAL.Users;
 namespace Vestora.DAL.Users;
 
 public class UserDAL : IUserDAL
 {
-    private readonly VestoraDbContext _dbContext;
+    private readonly VestoraDbContext m_objVestoraDbContext;
 
-    public UserDAL(VestoraDbContext dbContext)
+    public UserDAL(VestoraDbContext i_objVestoraDbContext)
     {
-        _dbContext = dbContext;
+        m_objVestoraDbContext = i_objVestoraDbContext;
     }
 
     public async Task<User?> GetByEmailAsync(
         string email,
         CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Users
+        return await m_objVestoraDbContext.Users
             .FirstOrDefaultAsync(
                 user => user.Email == email,
                 cancellationToken);
@@ -27,7 +27,7 @@ public class UserDAL : IUserDAL
         long userId,
         CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Users
+        return await m_objVestoraDbContext.Users
             .FirstOrDefaultAsync(
                 user => user.UserId == userId,
                 cancellationToken);
@@ -37,21 +37,29 @@ public class UserDAL : IUserDAL
         string email,
         CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Users
+        return await m_objVestoraDbContext.Users
             .AnyAsync(
                 user => user.Email == email,
                 cancellationToken);
     }
 
-    public async Task<User> CreateAsync(
+    public async Task<Entities.User?> GetUserByIdAsync(
+    long userId)
+    {
+        return await m_objVestoraDbContext.Users
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                user => user.UserId == userId);
+    }
+        public async Task<User> CreateAsync(
         User user,
         CancellationToken cancellationToken = default)
     {
-        await _dbContext.Users.AddAsync(
+        await m_objVestoraDbContext.Users.AddAsync(
             user,
             cancellationToken);
 
-        await _dbContext.SaveChangesAsync(
+        await m_objVestoraDbContext.SaveChangesAsync(
             cancellationToken);
 
         return user;
@@ -61,9 +69,10 @@ public class UserDAL : IUserDAL
         User user,
         CancellationToken cancellationToken = default)
     {
-        _dbContext.Users.Update(user);
+        m_objVestoraDbContext.Users.Update(user);
 
-        await _dbContext.SaveChangesAsync(
+        await m_objVestoraDbContext.SaveChangesAsync(
             cancellationToken);
     }
+
 }

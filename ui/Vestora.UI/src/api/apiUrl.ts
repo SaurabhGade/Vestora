@@ -1,5 +1,11 @@
 export const API_URL = {
     DASHBOARD: {
         GET_USER: "/dashboard/getUser"
+    },
+    USER: {
+        GET_USER: "/user/me"
+    },
+    CONFIG: {
+        MENU: "/config/menu",
     }
 };

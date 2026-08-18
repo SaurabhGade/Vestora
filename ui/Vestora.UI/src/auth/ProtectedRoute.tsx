@@ -22,9 +22,9 @@ export default function ProtectedRoute() {
     }
 
     if (!isAuthenticated) {
-
+        const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
         window.location.href =
-            "http://localhost:5227/Login";
+            `${AUTH_BASE_URL}/Login`;
 
         return null;
     }

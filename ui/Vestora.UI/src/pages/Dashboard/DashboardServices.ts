@@ -1,6 +1,6 @@
 import { api } from "../../api/client";
 import { API_URL } from "../../api/apiUrl";
-import type { GetUserRequest } from "./DashboardTypes";
+import type { GetUserRequest, GetUserResponse } from "./DashboardTypes";
 
 export const DashboardServices = {
 

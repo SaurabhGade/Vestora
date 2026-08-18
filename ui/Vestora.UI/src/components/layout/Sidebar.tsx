@@ -1,14 +1,27 @@
 import { NavLink } from "react-router-dom";
-import { menuItems } from "../../config/menuConfig";
-
+import ConfigServices from "../../services/ConfigServices";
+import type { MenuItem } from "../../services/ConfigServices";
+import { useEffect, useState } from "react";
+import AppConstants from "../../AppConstants"
 interface SidebarProps {
   isOpen: boolean;
 }
 
-export default function Sidebar({
-  isOpen
-}: SidebarProps) {
+export default function Sidebar({ isOpen }: SidebarProps) {
+  const [menuItems, setMenuItems] = useState<MenuItem[]>();
+  const getMenuItems = () => {
+    const successCB = (response: MenuItem[]) => {
+      setMenuItems(response);
+    }
+    const errorCB = () => {
+      console.error("failed to fetch menu list");
+    }
+    ConfigServices.getMenu({}, successCB, errorCB);
+  }
 
+  useEffect(() => {
+    getMenuItems();
+  }, [])
   return (
     <aside
       className={
@@ -34,11 +47,11 @@ export default function Sidebar({
 
       <nav className="sidebar-menu">
 
-        {menuItems.map(item => (
+        {menuItems?.map(item => (
 
           <NavLink
-            key={item.id}
-            to={item.path}
+            key={item.menuId}
+            to={item.route}
             className={({ isActive }) =>
               isActive
                 ? "menu-item menu-item-active"
@@ -47,12 +60,12 @@ export default function Sidebar({
           >
 
             <span className="menu-icon">
-              {item.icon}
+              {AppConstants.MenuIcons[item.icon]}
             </span>
 
             {isOpen && (
               <span>
-                {item.label}
+                {item.name}
               </span>
             )}
 

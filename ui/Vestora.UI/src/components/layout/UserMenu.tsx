@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import { useAuth } from "../../auth/AuthContext";
 
 export default function UserMenu() {
+  const AUTH_BASE_URL =
+    import.meta.env.VITE_AUTH_BASE_URL;
   const handleLogout = () => {
     window.location.href =
-      "http://localhost:5227/Logout";
+      `${AUTH_BASE_URL}/Logout`;
   };
 
   const {user, loading, isAuthenticated} = useAuth();

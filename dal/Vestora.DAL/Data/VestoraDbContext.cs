@@ -11,6 +11,7 @@ public class VestoraDbContext : DbContext
 
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<ConfigSetting> ConfigSettings { get; set; }
+    public DbSet<Security> Securities {get; set;}
 
     protected override void OnModelCreating(
         ModelBuilder modelBuilder)

@@ -2,6 +2,10 @@ namespace Vestora.DAL.Entities;
 
 public class ConfigSetting
 {
+    /// <summary>
+    /// Author: Saurabh Gade
+    /// COM_CONFIGSETTINGS Table for migration
+    /// </summary>
     public long ConfigId { get; set; }
 
     public string ConfigKey { get; set; } = string.Empty;

@@ -2,6 +2,10 @@ namespace Vestora.DAL.Entities;
 
 public class User
 {
+    /// <summary>
+    /// Author: Saurabh Gade
+    /// USR_USER Table for migration
+    /// </summary>
   public long UserId { get; set; }
 
   // Authentication

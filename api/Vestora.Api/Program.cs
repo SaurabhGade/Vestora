@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Vestora.DAL.Entities;
 using Vestora.DAL.Config;
 using Vestora.BO.Config;
+using Vestora.BO.Market;
+using Vestora.DAL.Market;
 
 
 /// Author: Saurabh Gade
@@ -19,12 +21,15 @@ void addSerives(IServiceCollection i_objIServiceCollection)
 
     i_objIServiceCollection.AddScoped<IDashboardBO, DashboardBO>();
     i_objIServiceCollection.AddScoped<IDashboardDAL, DashboardDAL>();
-    
+
     i_objIServiceCollection.AddScoped<IUserBO, UserBO>();
     i_objIServiceCollection.AddScoped<IUserDAL, UserDAL>();
 
     i_objIServiceCollection.AddScoped<IConfigBO, ConfigBO>();
     i_objIServiceCollection.AddScoped<IConfigDAL, ConfigDAL>();
+
+    i_objIServiceCollection.AddScoped<IMarketBO, MarketBO>();
+    i_objIServiceCollection.AddScoped<IMarketDAL, MarketDAL>();
 }
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,7 +1,5 @@
 -- Active: 1786867450645@@127.0.0.1@5432@vestora
 
-select * from "COM_CONFIGSETTINGS";
-
 INSERT INTO "COM_CONFIGSETTINGS"
 ("CONFIG_KEY","CONFIG_VALUE","CONFIG_TYPE","DESCRIPTION","IS_ACTIVE", "CREATED_BY", "CREATED_DATE", "MODIFIED_BY", "MODIFIED_DATE")
 VALUES
@@ -12,14 +10,15 @@ VALUES
 ('MENU_RISK','{"name":"Risk","route":"/risk","icon":"risk","displayOrder":6}','MENU','Investment risk analysis',TRUE, 1, NOW(), 1, NOW());
 
 
-UPDATE "COM_CONFIGSETTINGS"
-SET "CONFIG_TYPE" = 'MENU'
-WHERE "CONFIG_KEY" = 'MENU_IPO';
+INSERT INTO "SEC_SECURITY"
+( "SYMBOL", "COMPANY_NAME", "ISIN", "EXCHANGE", "SECURITY_TYPE", "SECTOR", "INDUSTRY", "IS_ACTIVE", "CREATED_DATE")
+VALUES
+( 'RELIANCE', 'Reliance Industries Ltd', 'INE002A01018', 'NSE', 'EQUITY', 'Energy', 'Oil & Gas', TRUE, CURRENT_TIMESTAMP),
+( 'TCS', 'Tata Consultancy Services Ltd', 'INE467B01029', 'NSE', 'EQUITY', 'Information Technology', 'IT Services', TRUE, CURRENT_TIMESTAMP),
+( 'INFY', 'Infosys Ltd', 'INE009A01021', 'NSE', 'EQUITY', 'Information Technology', 'IT Services', TRUE, CURRENT_TIMESTAMP),
+( 'HDFCBANK', 'HDFC Bank Ltd', 'INE040A01034', 'NSE', 'EQUITY', 'Financial Services', 'Banks', TRUE, CURRENT_TIMESTAMP),
+( 'ICICIBANK', 'ICICI Bank Ltd', 'INE090A01021', 'NSE', 'EQUITY', 'Financial Services', 'Banks', TRUE, CURRENT_TIMESTAMP);
 
- select   "CONFIG_ID",
-    "CONFIG_KEY",
-    "CONFIG_TYPE",
-    "CONFIG_VALUE",
-    "IS_ACTIVE"
-FROM "COM_CONFIGSETTINGS"
-ORDER BY "CONFIG_ID";
+
+
+select * from "SEC_SECURITY";

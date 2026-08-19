@@ -7,5 +7,8 @@ export const API_URL = {
     },
     CONFIG: {
         MENU: "/config/menu",
+    },
+    MARKET: {
+        GET_SECURITIES: "/market/GetSecurity",
     }
 };

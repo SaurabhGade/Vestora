@@ -9,6 +9,8 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 
 import AppLayout from "./components/layout/AppLayout";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import routeConstants from "./routes/routeConstants"
+import Market from "./pages/Market/Markets";
 
 function App() {
 
@@ -16,17 +18,13 @@ function App() {
     <BrowserRouter>
 
       <AuthProvider>
-
         <Routes>
-
           <Route element={<ProtectedRoute />}>
-
             <Route element={<AppLayout />}>
 
-              <Route
-                path="/"
-                element={<Dashboard />}
-              />
+              <Route path="/" element={<Dashboard />} />
+              <Route path={routeConstants.market.marketTable} element={<Market />} />
+              <Route path={routeConstants.market.legacy} element={<Market />} />
 
             </Route>
 

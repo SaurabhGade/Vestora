@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;700;900&display=swap');
 
 
 :root {
@@ -623,4 +624,187 @@ button {
     .profile-arrow {
         display: none;
     }
+}
+
+
+/* ================================
+   Market DataTable
+   ================================ */
+
+.dt-data-table {
+  width: 100%;
+  color: #d7e0ea;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+/* Main table */
+.dt-data-table .rdt_Table {
+  background-color: #0b1726;
+  border: 1px solid #1d344d;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ================================
+   Header
+   ================================ */
+
+.dt-data-table .rdt_TableHead {
+  background-color: #0d1b2b;
+}
+
+.dt-data-table .rdt_TableHeadRow {
+  min-height: 52px;
+  background-color: #0d1b2b;
+  color: #8fa3b8;
+  border-bottom: 1px solid #1d344d;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.dt-data-table .rdt_TableCol {
+  color: #8fa3b8;
+}
+
+.dt-data-table .rdt_TableCol_Sortable {
+  color: #8fa3b8;
+}
+
+.dt-data-table .rdt_TableCol_Sortable:hover {
+  color: #d7e0ea;
+}
+
+/* ================================
+   Rows
+   ================================ */
+
+.dt-data-table .rdt_TableBody {
+  background-color: #0b1726;
+}
+
+.dt-data-table .rdt_TableRow {
+  min-height: 56px;
+  background-color: #0b1726;
+  color: #d7e0ea;
+  border-bottom: 1px solid #182c42;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+/* Remove last row separator */
+.dt-data-table .rdt_TableRow:last-child {
+  border-bottom: none;
+}
+
+/* Hover */
+.dt-data-table .rdt_TableRow:hover {
+  background-color: #102238;
+  color: #f1f5f9;
+}
+
+/* Cells */
+.dt-data-table .rdt_TableCell {
+  color: #cbd5e1;
+  font-size: 13px;
+}
+
+/* ================================
+   Pagination
+   ================================ */
+
+.dt-data-table .rdt_Pagination {
+  min-height: 52px;
+  background-color: #0d1b2b;
+  color: #8fa3b8;
+  border-top: 1px solid #1d344d;
+}
+
+.dt-data-table .rdt_Pagination select {
+  background-color: #0b1726;
+  color: #cbd5e1;
+  border: 1px solid #1d344d;
+  border-radius: 6px;
+}
+
+.dt-data-table .rdt_Pagination button {
+  color: #8fa3b8;
+  fill: #8fa3b8;
+}
+
+.dt-data-table .rdt_Pagination button:hover:not(:disabled) {
+  color: #60a5fa;
+  fill: #60a5fa;
+  background-color: #102238;
+}
+
+.dt-data-table .rdt_Pagination button:disabled {
+  color: #3d5065;
+  fill: #3d5065;
+}
+
+/* ================================
+   Selected row
+   ================================ */
+
+.dt-data-table .rdt_TableRow.selected {
+  background-color: #102b47;
+  color: #e2e8f0;
+}
+
+/* ================================
+   Expandable rows
+   ================================ */
+
+.dt-data-table .rdt_ExpanderRow {
+  background-color: #0d1b2b;
+  color: #cbd5e1;
+  border-bottom: 1px solid #1d344d;
+}
+
+.dt-data-table .rdt_ExpanderRow:hover {
+  background-color: #102238;
+}
+
+/* ================================
+   Checkbox
+   ================================ */
+
+.dt-data-table .rdt_TableCell input[type="checkbox"],
+.dt-data-table .rdt_TableCol input[type="checkbox"] {
+  accent-color: #3b82f6;
+}
+
+/* ================================
+   Empty state
+   ================================ */
+
+.dt-data-table .rdt_TableBody .rdt_EmptyState {
+  background-color: #0b1726;
+  color: #71849a;
+  min-height: 120px;
+}
+
+/* ================================
+   Progress / loading
+   ================================ */
+
+.dt-data-table .rdt_TableBody .rdt_Progress {
+  background-color: #0b1726;
+  color: #8fa3b8;
+}
+
+/* ================================
+   Links / clickable values
+   ================================ */
+
+.dt-data-table a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+
+.dt-data-table a:hover {
+  color: #93c5fd;
 }

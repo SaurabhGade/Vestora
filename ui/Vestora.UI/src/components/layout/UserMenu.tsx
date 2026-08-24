@@ -9,7 +9,7 @@ export default function UserMenu() {
       `${AUTH_BASE_URL}/Logout`;
   };
 
-  const {user, loading, isAuthenticated} = useAuth();
+  const {user, isAuthenticated} = useAuth();
 
   const handleProfile = () => {
     console.log("Profile page coming later");

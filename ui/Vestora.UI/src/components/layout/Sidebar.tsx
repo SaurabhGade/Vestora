@@ -47,31 +47,34 @@ export default function Sidebar({ isOpen }: SidebarProps) {
 
       <nav className="sidebar-menu">
 
-        {menuItems?.map(item => (
+        {menuItems?.map(item => {
+          const iconKey = item.icon as keyof typeof AppConstants.MenuIcons;
+          const icon = AppConstants.MenuIcons[iconKey] ?? AppConstants.MenuIcons.markets;
 
-          <NavLink
-            key={item.menuId}
-            to={item.route}
-            className={({ isActive }) =>
-              isActive
-                ? "menu-item menu-item-active"
-                : "menu-item"
-            }
-          >
+          return (
+            <NavLink
+              key={item.menuId}
+              to={item.route.startsWith("/") ? item.route : `/${item.route}`}
+              className={({ isActive }) =>
+                isActive
+                  ? "menu-item menu-item-active"
+                  : "menu-item"
+              }
+            >
 
-            <span className="menu-icon">
-              {AppConstants.MenuIcons[item.icon]}
-            </span>
-
-            {isOpen && (
-              <span>
-                {item.name}
+              <span className="menu-icon">
+                {icon}
               </span>
-            )}
 
-          </NavLink>
+              {isOpen && (
+                <span>
+                  {item.name}
+                </span>
+              )}
 
-        ))}
+            </NavLink>
+          );
+        })}
 
       </nav>
 

@@ -13,9 +13,24 @@ cleanup() {
 trap cleanup EXIT SIGINT SIGTERM
 
 # Start components in the background
-dotnet run --project ./api/Vestora.Api &
-dotnet run --project ./auth/Vestora.auth &
-yarn --cwd ./ui/Vestora.UI dev &
 
+if [[ $? == 0 ]]; then
+  dotnet run --project ./api/Vestora.Api &
+else
+  echo "Clean up failed";
+  return 1;
+fi
+if [[ $1 == 0 ]]; then
+  dotnet run --project ./auth/Vestora.auth &
+else
+  echo "Unable to run API Project";  
+  return 2;
+fi
+if [[$1 == 0]]; then
+  yarn --cwd ./ui/Vestora.UI dev &
+else
+  echo "Unable to run UI Project";
+  return 3;
+fi
 # Wait keeps the script alive to capture logs
 wait

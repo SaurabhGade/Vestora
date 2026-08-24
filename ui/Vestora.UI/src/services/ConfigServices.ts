@@ -1,4 +1,3 @@
-import axios from "axios";
 import { API_URL } from "../api/apiUrl";
 import { api } from "../api/client";
 

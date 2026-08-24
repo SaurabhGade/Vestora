@@ -9,6 +9,6 @@ export const API_URL = {
         MENU: "/config/menu",
     },
     MARKET: {
-        GET_SECURITIES: "/market/GetSecurity",
+        GET_SECURITIES: "/market/getSecurities",
     }
 };

@@ -8,11 +8,10 @@ import { useAuth } from "./AuthContext";
 export default function ProtectedRoute() {
 
     const {
-        user,
         isAuthenticated,
         loading
     } = useAuth();
-    
+
     if (loading) {
         return (
             <div>
@@ -22,11 +21,18 @@ export default function ProtectedRoute() {
     }
 
     if (!isAuthenticated) {
-        const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL
-        window.location.href =
-            `${AUTH_BASE_URL}/Login`;
+        const AUTH_BASE_URL = import.meta.env.VITE_AUTH_BASE_URL;
 
-        return null;
+        if (AUTH_BASE_URL) {
+            return (
+                <Navigate
+                    to={`${AUTH_BASE_URL}/Login`}
+                    replace
+                />
+            );
+        }
+
+        return <div>Authentication required.</div>;
     }
 
     return <Outlet />;

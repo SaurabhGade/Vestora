@@ -1,4 +1,5 @@
 import { useAuth } from "../../auth/AuthContext";
+import Market from "../Market/Markets";
 
 export default function Dashboard() {
 
@@ -136,56 +137,8 @@ export default function Dashboard() {
 
       </section>
 
-      <section className="dashboard-panel">
 
-        <div className="panel-header">
-
-          <div>
-            <h2>Upcoming IPOs</h2>
-            <span>
-              Opportunities worth watching
-            </span>
-          </div>
-
-          <button className="panel-link">
-            View all
-          </button>
-
-        </div>
-
-        <div className="empty-state horizontal">
-
-          <div className="empty-icon">
-            ▣
-          </div>
-
-          <div>
-            <p>
-              IPO data will appear here
-            </p>
-
-            <span>
-              We'll connect this to the IPO
-              module later.
-            </span>
-          </div>
-
-        </div>
-        <div className="rounded-xl bg-slate-900 p-6">
-          <h1 className="text-3xl font-bold text-blue-400">
-            Vestora
-          </h1>
-
-          <p className="mt-2 text-slate-400">
-            Tailwind is working.
-          </p>
-
-          <button className="mt-4 rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-500">
-            Test
-          </button>
-        </div>
-
-      </section>
+      <Market />
 
     </div>
   );

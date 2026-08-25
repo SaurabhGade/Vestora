@@ -1,5 +1,5 @@
 import { useAuth } from "../../auth/AuthContext";
-import Market from "../Market/Markets";
+import Market from "../Market/Market";
 
 export default function Dashboard() {
 

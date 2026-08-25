@@ -1,11 +1,39 @@
 import { lazy } from "react"
 import routeConstants from './routeConstants'
-const Market = lazy(() => import('../../src/pages/Market/Markets'))
+import IPO from "../pages/IPO/IPO";
+import Watchlist from "../pages/Watchlist/Watchlist";
+import Portfolio from "../pages/Portfolio/Portfolio";
+import Risk from "../pages/Risk/Risk";
+const Market = lazy(() => import('../pages/Market/Market'))
 const coreRoutes = [
   {
     path: routeConstants.market.marketTable,
     breadcrumb: 'Market',
     component: Market,
+    accessMenu: '',
+  },
+  {
+    path: routeConstants.market.marketTable,
+    breadcrumb: 'IPO',
+    component: IPO,
+    accessMenu: '',
+  },
+  {
+    path: routeConstants.Watchlist.Watchlist,
+    breadcrumb: 'Watchlist',
+    component: Watchlist,
+    accessMenu: '',
+  },
+  {
+    path: routeConstants.Portfolio.Portfolio,
+    breadcrumb: 'Portfolio',
+    component: Portfolio,
+    accessMenu: '',
+  },
+  {
+    path: routeConstants.Risk.Risk,
+    breadcrumb: 'Risk',
+    component: Risk,
     accessMenu: '',
   },
 ]

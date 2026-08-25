@@ -1,10 +1,23 @@
+import Portfolio from "../pages/Portfolio/Portfolio";
+
 const routeConstants = {
   home: "/",
   dashboard: "/dashboard",
   market: {
-    marketTable: "/markets",
-    legacy: "/market",
+    marketTable: "/market",
   },
+  IPO: {
+    IPO: "/ipo",
+  }, 
+  Portfolio: {
+    Portfolio: "/portfolio"
+  }, 
+  Watchlist: {
+    Watchlist: "/watchlist"
+  },
+  Risk: {
+    Risk: "/risk"
+  }
 };
 
 export default routeConstants;

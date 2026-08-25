@@ -10,7 +10,11 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import AppLayout from "./components/layout/AppLayout";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import routeConstants from "./routes/routeConstants"
-import Market from "./pages/Market/Markets";
+import Market from "./pages/Market/Market";
+import IPO from "./pages/IPO/IPO";
+import Watchlist from "./pages/Watchlist/Watchlist";
+import Portfolio from "./pages/Portfolio/Portfolio";
+import Risk from "./pages/Risk/Risk";
 
 function App() {
 
@@ -24,8 +28,10 @@ function App() {
 
               <Route path="/" element={<Dashboard />} />
               <Route path={routeConstants.market.marketTable} element={<Market />} />
-              <Route path={routeConstants.market.legacy} element={<Market />} />
-
+              <Route path={routeConstants.IPO.IPO} element={<IPO/>} />
+              <Route path={routeConstants.Watchlist.Watchlist} element={<Watchlist/>} />
+              <Route path={routeConstants.Portfolio.Portfolio} element={<Portfolio/>} />
+              <Route path={routeConstants.Risk.Risk} element={<Risk/>} />
             </Route>
 
           </Route>

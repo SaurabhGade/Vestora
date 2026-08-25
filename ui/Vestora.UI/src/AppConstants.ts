@@ -2,7 +2,6 @@ const AppConstants = {
   MenuIcons: {
     "ipo": "▣",
     "market": "◈",
-    "markets": "◈",
     "portfolio": "◫",
     "watchlist": "☆",
     "risk": "△",

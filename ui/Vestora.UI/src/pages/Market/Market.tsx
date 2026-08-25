@@ -26,41 +26,17 @@ export default function Market() {
     setLoading(true);
     setError(null);
 
-    const successCB = (
-      response: GetSecuritiesResponseDTO
-    ) => {
-
+    const successCB = (response: GetSecuritiesResponseDTO) => {
       setSecurities(response.items);
       setLoading(false);
     };
-
-    const errorCB = (
-      error: unknown
-    ) => {
-
-      console.error(
-        "Failed to load securities:",
-        error
-      );
-
-      setError(
-        error instanceof Error
-          ? error.message
-          : "Failed to load securities."
-      );
-
+    const errorCB = (error: unknown) => {
+      console.error("Failed to load securities:", error);
+      setError(error instanceof Error ? error.message: "Failed to load securities.");
       setLoading(false);
     };
 
-    MarketServices.getSecurities(
-      {
-        search,
-        page: 1,
-        pageSize: 25,
-      },
-      successCB,
-      errorCB
-    );
+    MarketServices.getSecurities({ search, page: 1, pageSize: 25,}, successCB, errorCB);
   };
 
   const columns = [

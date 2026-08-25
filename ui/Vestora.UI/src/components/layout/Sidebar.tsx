@@ -17,9 +17,9 @@ export default function Sidebar({ isOpen, menuItems }: SidebarProps) {
   return (
     <aside className={isOpen ? "sidebar" : "sidebar sidebar-collapsed"}>
       <div className="sidebar-brand">
-        <button onClick={handleClickOnVestora} className="flex">
+        <button onClick={handleClickOnVestora} className="flex cursor-pointer">
           <div className="brand-mark">V</div>
-          {isOpen && <span className="brand-name pt-1">VESTORA</span>}
+          {isOpen && <span className="brand-name pt-1.75">VESTORA</span>}
         </button>
       </div>
 

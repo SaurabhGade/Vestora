@@ -5,6 +5,7 @@ const routeConstants = {
   dashboard: "/dashboard",
   market: {
     marketTable: "/market",
+    securityDetails: "/market/security/:securityId",
   },
   IPO: {
     IPO: "/ipo",

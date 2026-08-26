@@ -10,5 +10,7 @@ export const API_URL = {
     },
     MARKET: {
         GET_SECURITIES: "/market/getSecurities",
+        GET_SECURITY: "/market/getSecurity",
+         GET_MARKET_DATA: "/market/GetMarketData",
     }
 };

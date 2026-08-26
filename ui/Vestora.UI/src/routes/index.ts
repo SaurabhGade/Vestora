@@ -4,6 +4,7 @@ import IPO from "../pages/IPO/IPO";
 import Watchlist from "../pages/Watchlist/Watchlist";
 import Portfolio from "../pages/Portfolio/Portfolio";
 import Risk from "../pages/Risk/Risk";
+import SecurityDetails from "../pages/Market/SecurityDetails";
 const Market = lazy(() => import('../pages/Market/Market'))
 const coreRoutes = [
   {
@@ -13,7 +14,13 @@ const coreRoutes = [
     accessMenu: '',
   },
   {
-    path: routeConstants.market.marketTable,
+    path: routeConstants.market.securityDetails,
+    breadcrumb: "Security Details",
+    component: SecurityDetails,
+    accessMenu: "",
+  },
+  {
+    path: routeConstants.IPO.IPO,
     breadcrumb: 'IPO',
     component: IPO,
     accessMenu: '',

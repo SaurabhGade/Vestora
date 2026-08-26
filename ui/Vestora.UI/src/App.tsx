@@ -15,6 +15,7 @@ import IPO from "./pages/IPO/IPO";
 import Watchlist from "./pages/Watchlist/Watchlist";
 import Portfolio from "./pages/Portfolio/Portfolio";
 import Risk from "./pages/Risk/Risk";
+import SecurityDetails from "./pages/Market/SecurityDetails";
 
 function App() {
 
@@ -32,6 +33,7 @@ function App() {
               <Route path={routeConstants.Watchlist.Watchlist} element={<Watchlist/>} />
               <Route path={routeConstants.Portfolio.Portfolio} element={<Portfolio/>} />
               <Route path={routeConstants.Risk.Risk} element={<Risk/>} />
+              <Route path={routeConstants.market.securityDetails} element={<SecurityDetails />} />
             </Route>
 
           </Route>

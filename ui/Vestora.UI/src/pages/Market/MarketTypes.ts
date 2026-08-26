@@ -45,3 +45,38 @@ export interface GetSecuritiesResponseDTO {
     pageSize: number;
     totalPages: number;
 }
+
+export interface GetSecurityRequestDTO
+  extends BaseRequestDTO {
+  securityId: number;
+}
+
+export interface GetSecurityResponseDTO {
+  security: SecurityDTO;
+}
+
+export interface GetMarketDataRequestDTO
+  extends BaseRequestDTO {
+  securityId: number;
+  fromDate?: string;
+  toDate?: string;
+}
+
+export interface MarketDataDTO {
+  tradeDate: string;
+  openPrice?: number;
+  highPrice?: number;
+  lowPrice?: number;
+  closePrice?: number;
+  adjustedClosePrice?: number;
+  previousClosePrice?: number;
+  volume?: number;
+  valueTraded?: number;
+  changeValue?: number;
+  changePercent?: number;
+}
+
+export interface GetMarketDataResponseDTO {
+  securityId: number;
+  items: MarketDataDTO[];
+}

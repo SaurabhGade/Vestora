@@ -47,3 +47,4 @@ Thumbs.db
 
 # Auth keyrings
 config/DataProtectionKeys/
+dotnet-tools.json

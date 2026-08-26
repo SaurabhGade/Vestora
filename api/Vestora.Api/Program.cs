@@ -30,6 +30,9 @@ void addSerives(IServiceCollection i_objIServiceCollection)
 
     i_objIServiceCollection.AddScoped<IMarketBO, MarketBO>();
     i_objIServiceCollection.AddScoped<IMarketDAL, MarketDAL>();
+
+    i_objIServiceCollection.AddScoped<IMarketDataBO, MarketDataBO>();
+    i_objIServiceCollection.AddScoped<IMarketDataDAL, MarketDataDAL>();
 }
 
 var builder = WebApplication.CreateBuilder(args);

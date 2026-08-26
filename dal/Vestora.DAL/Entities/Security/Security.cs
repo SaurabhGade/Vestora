@@ -2,10 +2,10 @@ namespace Vestora.DAL.Entities;
 
 public class Security
 {
-      /// <summary>
-    /// Author: Saurabh Gade
-    /// SEC_SECURITY Table for migration
-    /// </summary>
+  /// <summary>
+  /// Author: Saurabh Gade
+  /// SEC_SECURITY Table for migration
+  /// </summary>
   public long SecurityId { get; set; }
 
   public string Symbol { get; set; } = string.Empty;

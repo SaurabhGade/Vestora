@@ -2,5 +2,5 @@ namespace Vestora.BO.Market;
 
 public interface IMarketBO
 {
-    Task<GetSecuritiesResponseDTO> GetSecuritiesAsync(GetSecuritiesRequestDTO request);
+    Task<GetSecuritiesResponseDTO> GetSecuritiesAsync(GetSecuritiesRequestDTO i_objGetSecuritiesRequestDTO);
 }

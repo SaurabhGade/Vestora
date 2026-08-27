@@ -5,45 +5,59 @@ import Watchlist from "../pages/Watchlist/Watchlist";
 import Portfolio from "../pages/Portfolio/Portfolio";
 import Risk from "../pages/Risk/Risk";
 import SecurityDetails from "../pages/Market/SecurityDetails";
+import type { AppRoute } from "./types";
 const Market = lazy(() => import('../pages/Market/Market'))
-const coreRoutes = [
+const coreRoutes: AppRoute[] = [
   {
     path: routeConstants.market.marketTable,
-    breadcrumb: 'Market',
+    breadcrumb: "Market",
     component: Market,
-    accessMenu: '',
-  },
-  {
-    path: routeConstants.market.securityDetails,
-    breadcrumb: "Security Details",
-    component: SecurityDetails,
     accessMenu: "",
   },
+
+  {
+    path: routeConstants.market.securityDetails,
+
+    breadcrumb: (location) =>
+      location.state?.security?.symbol ??
+      "Security",
+
+    parent:
+      routeConstants.market.marketTable,
+
+    component: SecurityDetails,
+
+    accessMenu: "",
+  },
+
   {
     path: routeConstants.IPO.IPO,
-    breadcrumb: 'IPO',
+    breadcrumb: "IPO",
     component: IPO,
-    accessMenu: '',
+    accessMenu: "",
   },
+
   {
     path: routeConstants.Watchlist.Watchlist,
-    breadcrumb: 'Watchlist',
+    breadcrumb: "Watchlist",
     component: Watchlist,
-    accessMenu: '',
+    accessMenu: "",
   },
+
   {
     path: routeConstants.Portfolio.Portfolio,
-    breadcrumb: 'Portfolio',
+    breadcrumb: "Portfolio",
     component: Portfolio,
-    accessMenu: '',
+    accessMenu: "",
   },
+
   {
     path: routeConstants.Risk.Risk,
-    breadcrumb: 'Risk',
+    breadcrumb: "Risk",
     component: Risk,
-    accessMenu: '',
+    accessMenu: "",
   },
-]
+];
 
 const routes = [...coreRoutes];
 export default routes;

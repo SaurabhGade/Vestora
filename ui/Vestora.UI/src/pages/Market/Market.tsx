@@ -5,6 +5,7 @@ import MarketServices from "./MarketServices";
 import type { GetSecuritiesResponseDTO, SecurityDTO } from "./MarketTypes";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
+import PageContainer from "../../components/layout/PageContainer";
 
 export default function Market() {
   const [search, setSearch] = useState("");
@@ -40,7 +41,7 @@ export default function Market() {
   };
 
   const navigateToMarketDetailsPage = (row: SecurityDTO) => {
-    console.log('fff row', row);
+    console.log("fff row", row);
     navigate(`/market/security/${row.securityId}`, {
       state: {
         securityDetails: row,
@@ -87,16 +88,18 @@ export default function Market() {
   }, []);
 
   return (
-    <div>
-      {loading && <p>Loading securities...</p>}
-      {error && <p>{error}</p>}
-      <DataTable
-        className="dt-data-table"
-        columns={columns}
-        data={securities}
-        onRowClicked={(row) => navigateToMarketDetailsPage(row)}
-        pointerOnHover
-      />
-    </div>
+    <PageContainer>
+      <div>
+        {loading && <p>Loading securities...</p>}
+        {error && <p>{error}</p>}
+        <DataTable
+          className="dt-data-table"
+          columns={columns}
+          data={securities}
+          onRowClicked={(row) => navigateToMarketDetailsPage(row)}
+          pointerOnHover
+        />
+      </div>
+    </PageContainer>
   );
 }

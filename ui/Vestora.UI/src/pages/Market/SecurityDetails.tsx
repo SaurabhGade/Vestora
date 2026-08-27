@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import MarketServices from "./MarketServices";
 
@@ -9,11 +10,14 @@ import type {
   MarketDataDTO,
   SecurityDTO,
 } from "./MarketTypes";
+import DataTable from "react-data-table-component";
 
 function SecurityDetails() {
   const { securityId } = useParams<{ securityId: string }>();
-
-  const [security, setSecurity] = useState<SecurityDTO | null>(null);
+  const location = useLocation();
+  const [security, setSecurity] = useState<SecurityDTO | null>(
+    location.state?.securityDetails,
+  );
 
   const [marketData, setMarketData] = useState<MarketDataDTO[]>([]);
 
@@ -21,66 +25,80 @@ function SecurityDetails() {
 
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!securityId) {
-      setError("Security ID is missing.");
+  if (!securityId) {
+    setError("Security ID is missing.");
+    setLoading(false);
+    return;
+  }
+
+  const id = Number(securityId);
+
+  const GetMarketData = () => {
+    setLoading(true);
+    const successCB = (response: GetMarketDataResponseDTO) => {
       setLoading(false);
-      return;
-    }
-
-    const id = Number(securityId);
-
-    if (!Number.isInteger(id) || id <= 0) {
-      setError("Invalid security ID.");
-      setLoading(false);
-      return;
-    }
-
-    const getSecuritySuccessCB = (response: GetSecurityResponseDTO) => {
-      setSecurity(response.security);
-    };
-
-    const getSecurityErrorCB = (error: unknown) => {
-      console.error("Failed to load security:", error);
-
-      setError(
-        error instanceof Error ? error.message : "Failed to load security.",
-      );
-    };
-
-    MarketServices.getSecurity(
-      {
-        securityId: id,
-      },
-      getSecuritySuccessCB,
-      getSecurityErrorCB,
-    );
-    const getMarketDataSuccessCB = (response: GetMarketDataResponseDTO) => {
       setMarketData(response.items);
     };
 
-    const getMarketDataErrorCB = (error: unknown) => {
+    const errorCB = (error: unknown) => {
       console.error("Failed to load market data:", error);
 
       setError(
         error instanceof Error ? error.message : "Failed to load market data.",
       );
+      setLoading(false);
     };
 
     MarketServices.getMarketData(
       {
         securityId: id,
       },
-      getMarketDataSuccessCB,
-      getMarketDataErrorCB,
+      successCB,
+      errorCB,
     );
-  }, [securityId]);
+  };
+
+  const columns = [
+    {
+      name: "Date",
+      selector: (row: MarketDataDTO) => row.tradeDate,
+      sortable: true,
+    },
+    {
+      name: "Open",
+      selector: (row: MarketDataDTO) => row.openPrice,
+      sortable: true,
+    },
+    {
+      name: "High",
+      selector: (row: MarketDataDTO) => row.highPrice,
+      sortable: true,
+    },
+    {
+      name: "Low",
+      selector: (row: MarketDataDTO) => row.lowPrice,
+      sortable: true,
+    },
+    {
+      name: "Close",
+      selector: (row: MarketDataDTO) => row.closePrice,
+      sortable: true,
+    },
+    {
+      name: "Volume",
+      selector: (row: MarketDataDTO) => row.volume,
+      sortable: true,
+    },
+  ];
 
   useEffect(() => {
-    if (security || error) {
+    if (!Number.isInteger(id) || id <= 0) {
+      setError("Invalid security ID.");
       setLoading(false);
+      return;
     }
-  }, [security, error]);
+    GetMarketData();
+  }, []);
 
   if (loading) {
     return <div className="p-6">Loading security...</div>;
@@ -112,98 +130,47 @@ function SecurityDetails() {
     marketData.length > 0 ? marketData[marketData.length - 1] : null;
 
   return (
-    <div className="p-6">
+    <div className="min-h-screen bg-[#071321] p-6">
       {/* Header */}
-
       <div className="mb-6">
-        <div
-          className="
-          flex
-          items-center
-          gap-3
-        "
-        >
-          <h1
-            className="
-            text-2xl
-            font-semibold
-            text-gray-900
-          "
-          >
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-semibold text-slate-100">
             {security.companyName}
           </h1>
 
-          <span
-            className="
-            rounded-md
-            bg-gray-100
-            px-2
-            py-1
-            text-sm
-            font-medium
-            text-gray-700
-          "
-          >
+          <span className="rounded-md bg-slate-100 px-2.5 py-1 text-sm font-medium text-slate-700">
             {security.symbol}
           </span>
         </div>
 
-        <div
-          className="
-          mt-2
-          flex
-          gap-3
-          text-sm
-          text-gray-500
-        "
-        >
+        <div className="mt-2 flex items-center gap-3 text-sm text-slate-400">
           <span>{security.exchange}</span>
-          <span>•</span>
+          <span className="text-slate-600">•</span>
           <span>{security.securityType}</span>
-          <span>•</span>
+          <span className="text-slate-600">•</span>
           <span>{security.sector}</span>
         </div>
       </div>
 
-      {/* Current price */}
-
+      {/* Latest Price */}
       {latest && (
-        <div
-          className="
-          mb-6
-          rounded-xl
-          border
-          border-gray-200
-          bg-white
-          p-6
-          shadow-sm
-        "
-        >
-          <div
-            className="
-            text-sm
-            text-gray-500
-          "
-          >
-            Latest Close
-          </div>
+        <div className="mb-6 rounded-xl border p-6 shadow-sm">
+          <div className="text-sm font-medium ">Latest Close</div>
 
-          <div
-            className="
-            mt-2
-            text-3xl
-            font-semibold
-            text-gray-900
-          "
-          >
+          <div className="mt-2 text-3xl font-semibold tracking-tight">
             ₹{latest.closePrice?.toLocaleString()}
           </div>
 
           <div
-            className="
-            mt-2
-            text-sm
-          "
+            className={`mt-2 text-sm font-medium ${
+              latest.changePercent == null
+                ? "text-white"
+                : latest.changePercent > 0
+                  ? "text-emerald-600"
+                  : latest.changePercent < 0
+                    ? "text-red-600"
+                    : "text-slate-500"
+            }`}
           >
             {latest.changePercent != null
               ? `${latest.changePercent > 0 ? "+" : ""}${latest.changePercent}%`
@@ -212,169 +179,47 @@ function SecurityDetails() {
         </div>
       )}
 
-      {/* Security information */}
+      <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+        {/* ISIN */}
+        <div className="rounded-xl border  p-5 shadow-sm">
+          <div className="text-sm font-medium ">ISIN</div>
 
-      <div
-        className="
-        mb-6
-        grid
-        grid-cols-1
-        gap-4
-        md:grid-cols-3
-      "
-      >
-        <div
-          className="
-          rounded-xl
-          border
-          border-gray-200
-          bg-white
-          p-5
-        "
-        >
-          <div className="text-sm text-gray-500">ISIN</div>
-
-          <div
-            className="
-            mt-2
-            font-medium
-            text-gray-900
-          "
-          >
+          <div className="mt-2 font-medium ">
             {security.isin ?? "-"}
           </div>
         </div>
 
-        <div
-          className="
-          rounded-xl
-          border
-          border-gray-200
-          bg-white
-          p-5
-        "
-        >
-          <div className="text-sm text-gray-500">Sector</div>
+        {/* Sector */}
+        <div className="rounded-xl border p-5 shadow-sm">
+          <div className="text-sm font-medium">Sector</div>
 
-          <div
-            className="
-            mt-2
-            font-medium
-            text-gray-900
-          "
-          >
+          <div className="mt-2 font-medium ">
             {security.sector ?? "-"}
           </div>
         </div>
 
-        <div
-          className="
-          rounded-xl
-          border
-          border-gray-200
-          bg-white
-          p-5
-        "
-        >
-          <div className="text-sm text-gray-500">Industry</div>
+        {/* Industry */}
+        <div className="rounded-xl border p-5 shadow-sm">
+          <div className="text-sm font-medium ">Industry</div>
 
-          <div
-            className="
-            mt-2
-            font-medium
-            text-gray-900
-          "
-          >
+          <div className="mt-2 font-medium">
             {security.industry ?? "-"}
           </div>
         </div>
       </div>
 
-      {/* Market data */}
-
-      <div
-        className="
-        rounded-xl
-        border
-        border-gray-200
-        bg-white
-        p-6
-      "
-      >
-        <h2
-          className="
-          text-lg
-          font-semibold
-          text-gray-900
-        "
-        >
+      <div className="rounded-xl borde shadow-sm">
+        <h2 className="text-lg font-bold ">
           Market Data
         </h2>
 
-        <div
-          className="
-          mt-4
-          overflow-x-auto
-        "
-        >
-          <table
-            className="
-            w-full
-            text-left
-            text-sm
-          "
-          >
-            <thead>
-              <tr
-                className="
-                border-b
-                border-gray-200
-                text-gray-500
-              "
-              >
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Open</th>
-                <th className="px-4 py-3">High</th>
-                <th className="px-4 py-3">Low</th>
-                <th className="px-4 py-3">Close</th>
-                <th className="px-4 py-3">Volume</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {marketData.map((data) => (
-                <tr
-                  key={data.tradeDate}
-                  className="
-                    border-b
-                    border-gray-100
-                  "
-                >
-                  <td className="px-4 py-3">{data.tradeDate}</td>
-
-                  <td className="px-4 py-3">{data.openPrice ?? "-"}</td>
-
-                  <td className="px-4 py-3">{data.highPrice ?? "-"}</td>
-
-                  <td className="px-4 py-3">{data.lowPrice ?? "-"}</td>
-
-                  <td
-                    className="
-                    px-4
-                    py-3
-                    font-medium
-                  "
-                  >
-                    {data.closePrice ?? "-"}
-                  </td>
-
-                  <td className="px-4 py-3">
-                    {data.volume?.toLocaleString() ?? "-"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="overflow-hidden">
+          <DataTable
+            className="dt-data-table"
+            columns={columns}
+            data={marketData}
+            pointerOnHover
+          />
         </div>
       </div>
     </div>

@@ -39,6 +39,15 @@ export default function Market() {
     );
   };
 
+  const navigateToMarketDetailsPage = (row: SecurityDTO) => {
+    console.log('fff row', row);
+    navigate(`/market/security/${row.securityId}`, {
+      state: {
+        securityDetails: row,
+      },
+    });
+  };
+
   const columns = [
     {
       name: "Name",
@@ -85,9 +94,7 @@ export default function Market() {
         className="dt-data-table"
         columns={columns}
         data={securities}
-        onRowClicked={(row) => {
-          navigate(`/market/security/${row.securityId}`);
-        }}
+        onRowClicked={(row) => navigateToMarketDetailsPage(row)}
         pointerOnHover
       />
     </div>
